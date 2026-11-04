@@ -95,7 +95,7 @@ const Footer = () => {
             <div className="border-t border-white/15">
                 <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-center text-xs text-[#d5d0c5] md:flex-row lg:px-8">
                     <p>
-                        © {new Date().getFullYear()} BookNook. All rights reserved.
+                        © 2026 BookNook. All rights reserved.
                     </p>
 
                     <p>Made with care for every book lover. ♡</p>
