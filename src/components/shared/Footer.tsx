@@ -1,10 +1,7 @@
-
 import Link from "next/link";
 import {
     BookOpen,
     Mail,
-    MapPin,
-    Phone,
 } from "lucide-react";
 import { FaFacebook, FaGoogle, FaLinkedinIn } from "react-icons/fa";
 import { BsInstagram } from "react-icons/bs";

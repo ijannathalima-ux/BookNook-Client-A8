@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -55,7 +54,7 @@ const HeroSlider = () => {
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div
-              className="relative flex min-h-[420px] items-center bg-cover bg-center px-8 py-16 md:min-h-[500px] md:px-16"
+              className="relative flex min-h-105 items-center bg-cover bg-center px-8 py-16 md:min-h-125 md:px-16"
               style={{
                 backgroundImage: `linear-gradient(90deg, rgba(25, 42, 32, 0.90), rgba(25, 42, 32, 0.25)), url(${slide.image})`,
               }}
