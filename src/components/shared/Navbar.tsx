@@ -1,35 +1,19 @@
-
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
-
-import {
-  BookOpen,
-  Menu,
-  X,
-  UserRound,
-  LogOut,
-  ChevronDown,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BookOpen, Menu, X } from "lucide-react";
+import UserInfo from "./UserInfo";
 
 const Navbar = () => {
-  const user = null;
-
   const [isOpen, setIsOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "All Books", href: "/books" },
-    ...(user
-      ? [
-        { name: "Add Book", href: "/add-book" },
-        { name: "My Books", href: "/my-books" },
-        { name: "My Borrows", href: "/my-borrows" },
-      ]
-      : []),
+    { name: "Add Book", href: "/add-book" },
+    { name: "My Books", href: "/my-books" },
+    { name: "My Borrows", href: "/my-borrows" },
   ];
 
   return (
@@ -64,60 +48,15 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Desktop Buttons */}
-        <div className="hidden items-center gap-3 md:flex">
-          {user ? (
-            <div className="relative">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 rounded-full border border-[#e8dfd2] px-3 py-2 text-[#254b38]"
-              >
-                <UserRound size={18} />
-                <span className="text-sm">My Account</span>
-                <ChevronDown size={16} />
-              </button>
-
-              {profileOpen && (
-                <div className="absolute right-0 mt-3 w-44 rounded-xl border border-[#e8dfd2] bg-white p-2 shadow-lg">
-                  <Link
-                    href="/profile"
-                    className="block rounded-lg px-3 py-2 text-sm hover:bg-[#f5f0e7]"
-                  >
-                    My Profile
-                  </Link>
-                  <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50">
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              {/* Login Button */}
-              <Button
-                variant="outline"
-                className="border-[#254b38] text-[#254b38] hover:bg-[#edf2ed]"
-                asChild
-              >
-                <Link href="/login">Login</Link>
-              </Button>
-
-              {/* Register Button */}
-              <Button
-                className="bg-[#254b38] text-white hover:bg-[#193829]"
-                asChild
-              >
-                <Link href="/register">Register</Link>
-              </Button>
-            </>
-          )}
+        {/* Desktop Auth / UserInfo Section */}
+        <div className="hidden md:flex items-center">
+          <UserInfo />
         </div>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="rounded-lg p-2 text-[#254b38] hover:bg-[#edf2ed] md:hidden"
+          className="rounded-lg p-2 text-[#254b38] hover:bg-[#edf2ed] md:hidden cursor-pointer"
           aria-label="Toggle menu"
         >
           {isOpen ? <X size={25} /> : <Menu size={25} />}
@@ -139,17 +78,9 @@ const Navbar = () => {
               </Link>
             ))}
 
-            {!user && (
-              <div className="flex gap-3 border-t border-[#e8dfd2] pt-4">
-                <Button variant="outline" className="flex-1 border-[#254b38] text-[#254b38]" asChild>
-                  <Link href="/login">Login</Link>
-                </Button>
-
-                <Button className="flex-1 bg-[#254b38] hover:bg-[#193829]" asChild>
-                  <Link href="/register">Register</Link>
-                </Button>
-              </div>
-            )}
+            <div className="border-t border-[#e8dfd2] pt-4">
+              <UserInfo />
+            </div>
           </div>
         </div>
       )}

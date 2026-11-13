@@ -3,32 +3,70 @@
 import { useState } from "react";
 import { BookPlus, Image as ImageIcon, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function AddBookPage() {
 
     const [loading, setLoading] = useState(false);
+    const { data: session, isPending } = authClient.useSession();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!session?.user) {
+            toast.error("Please login first!");
+            return;
+        }
+
         setLoading(true);
 
-        const formData = new FormData(e.currentTarget);
+        const form = e.currentTarget;
+        const formData = new FormData(form);
 
-        const bookData = Object.fromEntries(formData.entries());
+        const bookData = {
+            ...Object.fromEntries(formData.entries()),
+            copies: Number(formData.get("copies")),
+            userName: session.user.name,
+            userEmail: session.user.email,
+            createdAt: new Date().toISOString(),
+        };
 
-        const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bookData),
-        });
+        try {
+            const result = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(bookData),
+                }
+            );
 
-        const data = await result.json();
+            const data = await result.json();
 
-        console.log("Submitting Book Data:", bookData);
-        console.log(data);
+            if (!result.ok) {
+                throw new Error(data.message || "Failed to add book!");
+            }
 
+            toast.success("Book added successfully!");
+            form.reset();
+
+            console.log(data);
+
+        } catch (error) {
+            console.error(error);
+
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong!"
+            );
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -95,7 +133,7 @@ export default function AddBookPage() {
                                 <option value="Science">Science</option>
                                 <option value="History">History</option>
                                 <option value="Kids">Kids</option>
-                                <option value="Fantasy">Fantasy</option>
+                                <option value="Others">Others</option>
                             </select>
                         </div>
                         <div>
@@ -150,8 +188,8 @@ export default function AddBookPage() {
                             <input
                                 type="text"
                                 name="userName"
-                                value="Israt Jannat Halima"
-                                readOnly
+                                value={session?.user?.name || ""}
+                                required
                                 placeholder="User Name"
                                 className="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#254b38]/20 focus:border-[#254b38] text-sm"
                             />
@@ -163,7 +201,7 @@ export default function AddBookPage() {
                             <input
                                 type="email"
                                 name="userEmail"
-                                value="ijannathalima@gmail.com"
+                                value={session?.user?.email || ""}
                                 required
                                 placeholder="Email"
                                 className="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#254b38]/20 focus:border-[#254b38] text-sm"
@@ -175,7 +213,7 @@ export default function AddBookPage() {
                     {/* Submit Button */}
                     <Button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || isPending}
                         className="w-full bg-[#254b38] text-white hover:bg-[#193829] py-3 rounded-xl font-medium shadow-md transition flex items-center justify-center gap-2"
                     >
                         <Send size={18} />

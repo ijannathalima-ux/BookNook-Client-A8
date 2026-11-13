@@ -36,7 +36,7 @@ const slides = [
   },
 ];
 
-const HeroSlider = () => {
+export default function HeroSlider() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-6 md:px-8">
       <Swiper
@@ -85,6 +85,4 @@ const HeroSlider = () => {
       </Swiper>
     </section>
   );
-};
-
-export default HeroSlider;
+}
