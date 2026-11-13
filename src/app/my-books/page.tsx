@@ -29,6 +29,42 @@ export default function MyBooksPage() {
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
+    const [deleting, setDeleting] = useState(false);
+
+
+    const handleDelete = async () => {
+        if (!selectedBookId) return;
+
+        setDeleting(true);
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books/${selectedBookId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to delete book.");
+            }
+
+            setBooks((previousBooks) =>
+                previousBooks.filter((book) => book._id !== selectedBookId)
+            );
+
+            toast.success("Book deleted successfully!");
+            setSelectedBookId(null);
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Could not delete the book.");
+        } finally {
+            setDeleting(false);
+        }
+    };
+
     useEffect(() => {
         const fetchMyBooks = async () => {
             if (isPending) return;
@@ -170,6 +206,7 @@ export default function MyBooksPage() {
                                     <Button
                                         variant="outline"
                                         className="border-red-200 text-red-500"
+                                        onClick={() => setSelectedBookId(book._id)}
                                     >
                                         <Trash2 size={16} />
                                         Delete
@@ -178,6 +215,46 @@ export default function MyBooksPage() {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {selectedBookId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+                    <div className="w-full max-w-md bg-white rounded-2xl p-7 shadow-xl">
+
+                        <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
+                            <Trash2 size={27} className="text-red-500" />
+                        </div>
+
+                        <h2 className="text-2xl font-bold text-center text-[#254b38]">
+                            Delete Book?
+                        </h2>
+
+                        <p className="text-stone-500 text-center mt-3">
+                            Are you sure you want to delete this book?
+                            This action cannot be undone.
+                        </p>
+
+                        <div className="flex gap-3 mt-7">
+                            <Button
+                                variant="outline"
+                                className="flex-1"
+                                disabled={deleting}
+                                onClick={() => setSelectedBookId(null)}
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                                disabled={deleting}
+                                onClick={handleDelete}
+                            >
+                                {deleting ? "Deleting..." : "Yes, Delete"}
+                            </Button>
+                        </div>
+
+                    </div>
                 </div>
             )}
         </div>
