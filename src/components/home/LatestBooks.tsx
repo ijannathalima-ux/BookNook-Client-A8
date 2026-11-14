@@ -17,14 +17,14 @@ interface Book {
 
 async function LatestBooks() {
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`, {
-        cache: "no-store",
-    });
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books?limit=6`,
+        {
+            cache: "no-store",
+        }
+    );
 
-    const books = await res.json();
-
-    const latestBooks = books.slice(-6).reverse();
-
+    const latestBooks = await res.json();
     return (
         <section className="py-16 px-4">
             <div className="max-w-7xl mx-auto">
