@@ -1,7 +1,7 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Layers, Calendar, User, Mail } from 'lucide-react';
+import BorrowButton from '@/components/shared/BorrowButton';
 
 interface BookDetailsProps {
     params: Promise<{ id: string }>;
@@ -113,8 +113,25 @@ export default async function BookDetailsPage({ params }: BookDetailsProps) {
                                         <span className="text-stone-500">{book.userEmail}</span>
                                     </div>
                                 )}
+
+
                             </div>
                         )}
+                        <div className="mt-6 flex justify-center gap-5">
+                            <BorrowButton
+                                bookId={book._id}
+                                title={book.title}
+                                image={book.image}
+                                copies={Number(book.copies)}
+                            />
+
+                            <Link
+                                href="/books"
+                                className="bg-stone-100 hover:bg-stone-200 text-[#254b38] px-4 py-2 rounded-md text-sm font-medium transition"
+                            >
+                                Back to all books
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

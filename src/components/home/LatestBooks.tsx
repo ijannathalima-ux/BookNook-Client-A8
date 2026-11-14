@@ -46,8 +46,8 @@ async function LatestBooks() {
                         >
                             <Image
                                 src={book.image}
-                                width={400}
-                                height={400}
+                                width={300}
+                                height={300}
                                 alt={book.title}
                                 className="w-full h-56 object-cover"
                             />
