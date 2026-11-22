@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, User, Mail, Calendar, Layers } from "lucide-react";
+import { unstable_rethrow } from "next/navigation";
+
 
 interface Book {
     _id: string;
@@ -19,14 +21,16 @@ interface Book {
 
 async function BooksContent() {
     let books: Book[] = [];
-
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`,
             { cache: "no-store" }
         );
-        books = await res.json();
+        if (res.ok) {
+            books = await res.json();
+        }
     } catch (error) {
+        unstable_rethrow(error);
         console.error("Error fetching books:", error);
     }
 
@@ -122,6 +126,7 @@ async function BooksContent() {
         </div>
     );
 }
+
 
 export default function AllBooksPage() {
     return (
