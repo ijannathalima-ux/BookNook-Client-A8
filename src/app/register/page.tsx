@@ -37,7 +37,7 @@ export default function RegisterPage() {
         return null;
     };
 
-    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);

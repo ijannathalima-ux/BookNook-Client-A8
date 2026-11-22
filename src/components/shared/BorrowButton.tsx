@@ -5,6 +5,7 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { getTokenClient } from "@/lib/getTokenClient";
 
 interface BorrowButtonProps {
     bookId: string;
@@ -45,6 +46,7 @@ export default function BorrowButton({ bookId, title, image, copies }: BorrowBut
 
         setLoading(true);
 
+        const token = await getTokenClient()
         try {
             const result = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/borrows`,
@@ -52,6 +54,7 @@ export default function BorrowButton({ bookId, title, image, copies }: BorrowBut
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({
                         bookId,
@@ -95,7 +98,7 @@ export default function BorrowButton({ bookId, title, image, copies }: BorrowBut
 
     return (
         <>
-            <Button 
+            <Button
                 className="bg-[#254b38]"
                 onClick={() => {
                     if (!session?.user) {

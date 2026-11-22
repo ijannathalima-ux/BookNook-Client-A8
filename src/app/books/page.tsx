@@ -1,3 +1,5 @@
+
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, User, Mail, Calendar, Layers } from "lucide-react";
@@ -15,13 +17,14 @@ interface Book {
     createdAt?: string;
 }
 
-export default async function AllBooksPage() {
+async function BooksContent() {
     let books: Book[] = [];
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`, {
-            cache: "no-store",
-        });
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`,
+            { cache: "no-store" }
+        );
         books = await res.json();
     } catch (error) {
         console.error("Error fetching books:", error);
@@ -29,7 +32,6 @@ export default async function AllBooksPage() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
-            {/* Header */}
             <div className="mb-10 text-center">
                 <h1 className="text-3xl font-bold text-[#254b38] mb-2">All Library Books</h1>
                 <p className="text-stone-500 text-sm">
@@ -37,7 +39,6 @@ export default async function AllBooksPage() {
                 </p>
             </div>
 
-            {/* Books Grid */}
             {books.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-2xl border border-stone-200">
                     <p className="text-stone-500">No books found in the library.</p>
@@ -63,7 +64,6 @@ export default async function AllBooksPage() {
                                     </span>
                                 </div>
 
-                                {/* Content */}
                                 <div className="p-5">
                                     <h2 className="text-xl font-bold text-stone-800 mb-1 line-clamp-1">
                                         {book.title}
@@ -75,7 +75,6 @@ export default async function AllBooksPage() {
                                         {book.description}
                                     </p>
 
-                                    {/* Copies & Metadata */}
                                     <div className="flex items-center justify-between text-xs text-stone-500 pb-4 mb-4 border-b border-stone-100">
                                         <div className="flex items-center gap-1.5">
                                             <Layers size={14} className="text-[#254b38]" />
@@ -89,7 +88,6 @@ export default async function AllBooksPage() {
                                         )}
                                     </div>
 
-                                    {/* Added By Info */}
                                     {(book.userName || book.userEmail) && (
                                         <div className="bg-stone-50 p-3 rounded-xl space-y-1 text-xs text-stone-600">
                                             {book.userName && (
@@ -109,7 +107,6 @@ export default async function AllBooksPage() {
                                 </div>
                             </div>
 
-                            {/* Action Button */}
                             <div className="p-5 pt-0">
                                 <Link
                                     href={`/books/${book._id}`}
@@ -123,5 +120,13 @@ export default async function AllBooksPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function AllBooksPage() {
+    return (
+        <Suspense fallback={<div className="text-center py-20">Loading books...</div>}>
+            <BooksContent />
+        </Suspense>
     );
 }

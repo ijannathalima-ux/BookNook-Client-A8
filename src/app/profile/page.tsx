@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
     const router = useRouter();
 
-    const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const updatedName = name.trim();

@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Layers, Calendar, User, Mail } from 'lucide-react';
 import BorrowButton from '@/components/shared/BorrowButton';
+import { getTokenServer } from '@/lib/getTokenServer';
+export const instant = false;
 
 interface BookDetailsProps {
     params: Promise<{ id: string }>;
@@ -9,12 +11,15 @@ interface BookDetailsProps {
 
 export default async function BookDetailsPage({ params }: BookDetailsProps) {
     const { id } = await params;
-
     let book = null;
 
     try {
+        const jwtToken = await getTokenServer()
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books/${id}`, {
-            cache: "no-store",
+            headers: {
+                Authorization: `Bearer ${jwtToken}`,
+            }
         });
 
         if (res.ok) {

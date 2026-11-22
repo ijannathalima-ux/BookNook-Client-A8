@@ -5,6 +5,7 @@ import { BookPlus, Image as ImageIcon, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { getTokenClient } from "@/lib/getTokenClient";
 
 export default function AddBookPage() {
 
@@ -32,6 +33,8 @@ export default function AddBookPage() {
             createdAt: new Date().toISOString(),
         };
 
+        const token = await getTokenClient()
+
         try {
             const result = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books`,
@@ -39,6 +42,7 @@ export default function AddBookPage() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(bookData),
                 }

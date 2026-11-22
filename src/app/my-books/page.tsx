@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { getTokenClient } from "@/lib/getTokenClient";
 
 interface Book {
     _id: string;
@@ -38,11 +39,15 @@ export default function MyBooksPage() {
 
         setDeleting(true);
 
+        const token = await getTokenClient()
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/books/${selectedBookId}`,
                 {
                     method: "DELETE",
+                    headers: {
+                        authorization: `Bearer ${token}`
+                    }
                 }
             );
 

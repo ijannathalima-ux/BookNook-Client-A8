@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { getTokenClient } from "@/lib/getTokenClient";
 
 interface Borrow {
     _id: string;
@@ -31,9 +32,15 @@ export default function MyBorrowsPage() {
 
         const fetchBorrows = async () => {
             try {
+                const token = await getTokenClient()
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/borrows?userEmail=${encodeURIComponent(session.user.email)}`,
-                    { cache: "no-store" }
+                    {
+                        cache: "no-store",
+                        headers: {
+                            authorization: `Bearer ${token}`
+                        }
+                    }
                 );
 
                 if (!res.ok) {
@@ -57,9 +64,15 @@ export default function MyBorrowsPage() {
         setReturningId(borrowId);
 
         try {
+            const token = await getTokenClient()
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/borrows/${borrowId}`,
-                { method: "DELETE" }
+                {
+                    method: "DELETE",
+                    headers: {
+                        authorization: `Bearer ${token}`
+                    }
+                }
             );
 
             const data = await res.json();
