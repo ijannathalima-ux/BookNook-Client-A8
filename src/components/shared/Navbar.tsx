@@ -4,17 +4,25 @@ import Link from "next/link";
 import { useState } from "react";
 import { BookOpen, Menu, X } from "lucide-react";
 import UserInfo from "./UserInfo";
+import { authClient } from "@/lib/auth-client";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = authClient.useSession();
+  const isLoggedIn = Boolean(session?.user);
 
-  const navLinks = [
+  const publicLinks = [
     { name: "Home", href: "/" },
-    { name: "All Books", href: "/books" },
+    { name: "All Books", href: "/books" }
+  ]
+
+  const privateLinks = [
     { name: "Add Book", href: "/add-book" },
     { name: "My Books", href: "/my-books" },
     { name: "My Borrows", href: "/my-borrows" },
   ];
+
+  const navLinks = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e8dfd2] bg-[#fffdf8]/95 backdrop-blur">

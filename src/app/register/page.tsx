@@ -21,9 +21,9 @@ import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const router = useRouter();
 
-    // Password Validation Criteria
     const validatePassword = (pass: string) => {
         if (pass.length < 6) {
             return "Password must be at least 6 characters long.";
@@ -37,7 +37,7 @@ export default function RegisterPage() {
         return null;
     };
 
-    const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -48,12 +48,14 @@ export default function RegisterPage() {
             password: string;
         };
 
-        const passwordError = validatePassword(user.password);
-        if (passwordError) {
-            toast.error(passwordError);
+        const passErr = validatePassword(user.password);
+        if (passErr) {
+            setPasswordError(passErr);
+            toast.error(passErr);
             return;
         }
 
+        setPasswordError(null);
         setIsLoading(true);
 
         try {
@@ -62,8 +64,8 @@ export default function RegisterPage() {
             });
 
             if (data) {
-                toast.success("Account created successfully!"); 
-                router.push("/");
+                toast.success("Account created successfully! Please login.");
+                router.push("/login");
             }
 
             if (error) {
@@ -88,10 +90,9 @@ export default function RegisterPage() {
             toast.error("Google Sign-In failed.");
         }
     };
-    
+
     return (
         <div className="min-h-[85vh] flex items-center justify-center px-4 py-8">
-
             <Card className="w-full max-w-md shadow-lg border-stone-200/80 rounded-3xl">
                 <CardHeader className="space-y-2 text-center pb-4">
                     <div className="mx-auto w-12 h-12 bg-[#254b38]/10 text-[#254b38] rounded-2xl flex items-center justify-center mb-1">
@@ -107,7 +108,6 @@ export default function RegisterPage() {
 
                 <CardContent className="space-y-4">
                     <form onSubmit={handleRegister} className="space-y-3.5">
-                        {/* Name Field */}
                         <div className="space-y-1">
                             <Label htmlFor="name" className="text-xs font-semibold text-stone-700">
                                 Full Name
@@ -125,7 +125,6 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        {/* Email Field */}
                         <div className="space-y-1">
                             <Label htmlFor="email" className="text-xs font-semibold text-stone-700">
                                 Email Address
@@ -143,7 +142,6 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        {/* Photo URL Field */}
                         <div className="space-y-1">
                             <Label htmlFor="photoUrl" className="text-xs font-semibold text-stone-700">
                                 Photo URL
@@ -161,7 +159,6 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        {/* Password Field */}
                         <div className="space-y-1">
                             <Label htmlFor="password" className="text-xs font-semibold text-stone-700">
                                 Password
@@ -173,13 +170,20 @@ export default function RegisterPage() {
                                     name="password"
                                     type="password"
                                     placeholder="••••••••"
+                                    onChange={() => {
+                                        if (passwordError) setPasswordError(null);
+                                    }}
                                     className="pl-10 rounded-xl border-stone-200 focus-visible:ring-[#254b38]"
                                     required
                                 />
                             </div>
+                            {passwordError && (
+                                <p className="text-xs font-medium text-red-500 mt-1">
+                                    {passwordError}
+                                </p>
+                            )}
                         </div>
 
-                        {/* Register Submit Button */}
                         <Button
                             type="submit"
                             disabled={isLoading}
@@ -188,7 +192,6 @@ export default function RegisterPage() {
                             {isLoading ? "Registering..." : "Register"}
                         </Button>
 
-                        {/* Google Submit Button */}
                         <Button
                             type="button"
                             onClick={handleGoogleRegister}
@@ -218,7 +221,6 @@ export default function RegisterPage() {
                     </form>
                 </CardContent>
 
-                {/* Link to Login Page */}
                 <CardFooter className="justify-center border-t border-stone-100 pt-3 pb-5">
                     <p className="text-xs text-stone-500">
                         Already have an account?{" "}

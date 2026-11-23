@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Link } from "lucide-react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
@@ -99,7 +99,7 @@ export default function MyBorrowsPage() {
     };
 
 
-    if (isPending) {
+    if (isPending || loading) {
         return (
             <div className="min-h-[50vh] flex items-center justify-center text-[#254b38]">
                 Loading borrowed books...
@@ -109,8 +109,14 @@ export default function MyBorrowsPage() {
 
     if (!session?.user) {
         return (
-            <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
+            <div className="min-h-[50vh] flex flex-col items-center justify-center gap-4">
                 <p className="text-stone-600">Please login to see your borrowed books.</p>
+                <Link
+                    href="/login?callbackURL=/my-borrows"
+                    className="rounded-xl bg-[#254b38] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e3c2c]"
+                >
+                    Login
+                </Link>
             </div>
         );
     }

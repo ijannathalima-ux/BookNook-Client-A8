@@ -33,7 +33,12 @@ export default function AddBookPage() {
             createdAt: new Date().toISOString(),
         };
 
-        const token = await getTokenClient()
+        const token = await getTokenClient();
+        if (!token) {
+            toast.error("Session expired! Please login again.");
+            setLoading(false);
+            return;
+        }
 
         try {
             const result = await fetch(
@@ -193,7 +198,7 @@ export default function AddBookPage() {
                                 type="text"
                                 name="userName"
                                 value={session?.user?.name || ""}
-                                required
+                                readOnly
                                 placeholder="User Name"
                                 className="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#254b38]/20 focus:border-[#254b38] text-sm"
                             />
@@ -206,7 +211,7 @@ export default function AddBookPage() {
                                 type="email"
                                 name="userEmail"
                                 value={session?.user?.email || ""}
-                                required
+                                readOnly
                                 placeholder="Email"
                                 className="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#254b38]/20 focus:border-[#254b38] text-sm"
                             />

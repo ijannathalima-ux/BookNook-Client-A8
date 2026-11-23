@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 BookNook — Online Library & Book Borrowing Platform
 
-## Getting Started
+BookNook is a full-stack online library and book borrowing web application built with Next.js (App Router), TypeScript, Express.js, MongoDB, and Better Auth. It helps readers explore books, share new titles, borrow and return copies, and manage their reading lists through a clean and responsive interface.
 
-First, run the development server:
+**Live Site:** https://book-nook-client-a8.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Browse the latest books and explore the full library catalog.
+- View detailed book information including author, genre, description, available copies, and contributor info.
+- Add new books with available copy counts and share them with the community.
+- Edit existing book details and delete user-owned books with confirmation.
+- Borrow available books with automatic 7-day borrow and return dates.
+- Prevent duplicate active borrows of the same book and automatically update available copies.
+- Return borrowed books from **My Borrows** and restore available copy counts.
+- Sign up and sign in using email and password with password validation.
+- Sign in with Google via Better Auth.
+- Protect private routes (`Add Book`, `My Books`, `My Borrows`, `Book Details`, `Profile`) and redirect unauthenticated users to login.
+- View profile details, update display name, and sign out.
+- Receive instant feedback through toast notifications.
+- Responsive design for mobile, tablet, and desktop screens.
+- Custom 404 Not Found page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- Swiper.js
+- Better Auth
+- Express.js
+- MongoDB
+- JWT (`jose`)
+- Lucide React
+- React Icons
+- React Hot Toast
 
-## Learn More
+## 🔐 Authentication
 
-To learn more about Next.js, take a look at the following resources:
+The application uses Better Auth and MongoDB for authentication and user management, along with JWT verification on protected Express endpoints:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Email and password authentication with password validation.
+- Google sign-in option.
+- User session and JWT token handling.
+- Protected routes and API endpoints.
+- Profile name updates.
+- Sign-out functionality.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+```text
+book-nook-client/
+├── src/
+│   ├── app/
+│   │   ├── add-book/
+│   │   ├── books/
+│   │   │   └── [id]/
+│   │   ├── login/
+│   │   ├── my-books/
+│   │   │   └── [id]/
+│   │   │       └── edit/
+│   │   ├── my-borrows/
+│   │   ├── profile/
+│   │   ├── register/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── not-found.tsx
+│   ├── components/
+│   │   ├── home/
+│   │   ├── shared/
+│   │   └── ui/
+│   └── lib/
+├── public/
+├── proxy.ts
+└── README.md
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🎯 Project Goal
+The goal of BookNook is to make discovering, sharing, and borrowing books simple and organized. Users can browse books, borrow titles with clear return tracking, and manage their own books and borrows seamlessly across devices.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+👩‍💻 Developer
+Israt Jannat Halima
+
+Aspiring Full Stack Web Developer.

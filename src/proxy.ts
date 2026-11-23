@@ -8,7 +8,7 @@ export async function proxy(request: NextRequest) {
     });
 
     if (!session) {
-        const registerUrl = new URL("/register", request.url);
+        const registerUrl = new URL("/login", request.url);
 
         registerUrl.searchParams.set(
             "callbackURL",
